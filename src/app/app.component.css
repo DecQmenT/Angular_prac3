@@ -9,11 +9,15 @@
     height: 100vh;
     z-index: 2;
     width: 20vw;
-    border: 1px solid black;
+    border-right: 1px solid black;
+    display: flex ;
+    justify-content: center;
+    align-items: center;
 }
 .right-container{
     height: 100vh;
     z-index: 2;
     width: 80vw;
     display: flex;
+    align-items: center;
 }   

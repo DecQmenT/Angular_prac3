@@ -29,6 +29,8 @@ export class PieChartManComponent implements OnInit {
       const labels = data.map((item: FoodItem) => item.food);
       const populations = data.map((item: FoodItem) => item.customer.man);
 
+      const totalPopulation = populations.reduce((acc, curr) => acc + curr, 0);
+
       this.chart = new Chart(this.pieChart.nativeElement, {
         type: 'pie',
         data: {
@@ -57,7 +59,24 @@ export class PieChartManComponent implements OnInit {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context: any) {
+                  let label = context.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed) {
+                    const percentage = ((context.parsed / totalPopulation) * 100).toFixed(2);
+                    label += context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                  }
+                  return label;
+                }
+              }
+            }
+          }
         }
       });
     });

@@ -11,14 +11,14 @@ interface FoodItem {
     woman: number;
   };
 }
+
 @Component({
   selector: 'app-pie-chart-woman',
-  standalone: true,
-  imports: [],
   templateUrl: './pie-chart-woman.component.html',
-  styleUrl: './pie-chart-woman.component.css'
+  styleUrls: ['./pie-chart-woman.component.css'],
+  standalone: true
 })
-export class PieChartWomanComponent {
+export class PieChartWomanComponent implements OnInit {
   @ViewChild('pieChart') pieChart!: ElementRef;
   chart: any;
 
@@ -28,6 +28,8 @@ export class PieChartWomanComponent {
     this.dataService.getJsonData().subscribe((data: FoodItem[]) => {
       const labels = data.map((item: FoodItem) => item.food);
       const populations = data.map((item: FoodItem) => item.customer.woman);
+
+      const totalPopulation = populations.reduce((acc, curr) => acc + curr, 0);
 
       this.chart = new Chart(this.pieChart.nativeElement, {
         type: 'pie',
@@ -57,7 +59,24 @@ export class PieChartWomanComponent {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context: any) {
+                  let label = context.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed) {
+                    const percentage = ((context.parsed / totalPopulation) * 100).toFixed(2);
+                    label += context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                  }
+                  return label;
+                }
+              }
+            }
+          }
         }
       });
     });

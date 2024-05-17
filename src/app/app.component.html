@@ -3,10 +3,11 @@
     <app-filter></app-filter>
   </div>
   <div class="right-container">
-    <!-- <app-pie-chart-man></app-pie-chart-man>
-    <app-pie-chart-woman></app-pie-chart-woman>  -->
-    <app-bar-chart></app-bar-chart> 
+    <ng-container *ngIf="selectedValue === 'a'">
+      <app-pie-chart-man></app-pie-chart-man>
+      <app-pie-chart-woman></app-pie-chart-woman> 
+    </ng-container>
+    <app-bar-chart *ngIf="selectedValue === 'b'"></app-bar-chart>
   </div>
 </div>
-
-<router-outlet />
+<router-outlet></router-outlet>
